@@ -11,10 +11,10 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
-public class APItest {
+public class ReqresTask {
 
     @Test
-    public void create01() {
+    public void getUsersCheckEmail() {
         Response response = RestAssured.given()
                 .get("https://reqres.in/api/users?page=1");
         assertEquals(200, response.getStatusCode());
@@ -26,7 +26,7 @@ public class APItest {
     //Убедиться, что GET запрос на https://reqres.in/api/users?page=1 возвращает 6 пользователей, среди которых есть пользователи с email george.bluth@reqres.in и emma.wong@reqres.in
 
     @Test
-    public void create() throws ParseException {
+    public void createNewUser() throws ParseException {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .post("https://reqres.in/api/users");
