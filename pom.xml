@@ -7,11 +7,16 @@
     <artifactId>TestAutomationChellenge</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <allure-junit4.version>2.13.5</allure-junit4.version>
         <java.version>1.8</java.version>
         <aspectj.version>1.9.5</aspectj.version>
         <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-        <aspectj.version>1.8.10</aspectj.version>
+        <junit.version>4.13</junit.version>
+        <rest-assured.version>3.0.7</rest-assured.version>
+        <json-path.version>3.3.0</json-path.version>
+        <lombok.version>1.18.12</lombok.version>
+        <mysql-connector-java.version>8.0.21</mysql-connector-java.version>
+        <json.version>20200518</json.version>
+        <code.gson.verion>2.8.6</code.gson.verion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -19,18 +24,39 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>3.0.7</version>
+            <version>${rest-assured.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-path</artifactId>
-            <version>3.3.0</version>
+            <version>${json-path.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${code.gson.verion}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -49,7 +75,6 @@
                         <property>
                             <name>listener</name>
                             <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-                            <aspectj.version>1.8.10</aspectj.version>
                         </property>
                     </properties>
                 </configuration>
