@@ -1,7 +1,11 @@
+package ru.chellenge.task0;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,9 +13,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 
-public class ReqresTask {
+public class Task0 {
 
     @Test
     public void getUsersCheckEmail() {
@@ -27,13 +32,17 @@ public class ReqresTask {
 
     @Test
     public void createNewUser() throws ParseException {
-        Response response = RestAssured.given()
+        final ValidatableResponse response = given()
                 .contentType(ContentType.JSON)
-                .post("https://reqres.in/api/users");
-        assertEquals(201, response.getStatusCode());
-        Date parseDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSSSS'Z'").parse(response.getBody().jsonPath().get("createdAt"));
+                .when()
+                .post("https://reqres.in/api/users")
+                .then()
+                .body(Matchers.anything());
+        Date parseDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSSSS'Z'").parse(response.extract().body().jsonPath().get("createdAt"));
         SimpleDateFormat myFormat = new SimpleDateFormat("dd.MM.yyyy");
         System.out.println(myFormat.format(parseDate));
     }
+
     //Создать пользователя с помощью POST запроса https://reqres.in/api/users и вывести в консоль дату создания из ответа от сервиса в формате ДД.ММ.ГГГГ
+
 }
