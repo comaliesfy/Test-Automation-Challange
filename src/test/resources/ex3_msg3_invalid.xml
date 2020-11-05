@@ -1,0 +1,16 @@
+<Transaction xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Transaction.xsd">
+	<Payer>
+		<Name>Armstrong Yuri Titovich</Name>
+		<Account>44198001623546034901</Account>
+	</Payer>
+	<Beneficiary>
+		<Name>Leonov Buz Tireshkovich</Name>
+		<Account>44197101023483327082</Account>
+	</Beneficiary>
+	<DealDetails>
+		<DealId>1132456741238</DealId>
+		<Amount>120.95</Amount>
+		<Date>2016-03-13</Date>
+		<Currecny>WRONG</Currecny>
+	</DealDetails>
+</Transaction>
