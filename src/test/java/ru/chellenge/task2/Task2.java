@@ -10,10 +10,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.jms.JMSException;
-import javax.jms.QueueConnection;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import javax.jms.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,6 +18,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 
 import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CM_CLIENT;
 import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CONNECTION_MODE;
@@ -28,10 +26,11 @@ import static com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CONNECTION_MODE;
 public class Task2 {
 
     private static QueueConnection queueConnection;
-    private static MQQueueSession session;
+    public static MQQueueSession session;
     private static MQQueueSender senderIN;
     private static MQQueueReceiver receiverOUT;
     private static MQQueueReceiver receiverResp;
+
     CheckXMLValue cxv = new CheckXMLValue();
 
     private String host = "192.168.15.74";
@@ -41,6 +40,7 @@ public class Task2 {
     private String queueIN = "queue:///TASK3.IN";
     private String queueOUT = "queue:///TASK3.OUT";
     private String queueRESP = "queue:///TASK3.RESP";
+    private QueueBrowser browser = null;
 
     @Before
     public void init() throws JMSException {
@@ -49,7 +49,6 @@ public class Task2 {
         senderIN = createSenderIN();
         receiverOUT = createReceiverOUT();
         receiverResp = createReceiverResp();
-
     }
 
     @After
@@ -92,7 +91,6 @@ public class Task2 {
         message.setStringProperty("TypeRequest", "loan");
         //Отправка сообщения в очередь IN
         senderIN.send(message);
-
         assertReceiveMessageResp(receiveMessageResp(), "Invalid or Empty Header", "Parsing Error: Header values either invalid or empty");
     }
 
@@ -162,13 +160,12 @@ public class Task2 {
     }
 
     public TextMessage receiveMessageResp() throws JMSException, InterruptedException {
-        //Полуение соощения из очереди REsp с ожиданием в 8 сек.
         Thread.sleep(8000);
-        TextMessage receivedMessageResp = (TextMessage) receiverResp.receive(8000);
-        return receivedMessageResp;
+        TextMessage receivedMessageResp = checkLastMessage(receiverResp);
+        return  receivedMessageResp;
     }
 
-    public void assertReceiveMessageResp(TextMessage receivedMessageResp, String headValue,String xmlValue) throws JMSException, IOException, SAXException, ParserConfigurationException {
+    public void assertReceiveMessageResp(TextMessage receivedMessageResp, String headValue, String xmlValue) throws JMSException, IOException, SAXException, ParserConfigurationException {
         if (receivedMessageResp!=null) {
             //Проверка заголовка ERROR
             Assert.assertTrue(receivedMessageResp.getStringProperty("ERROR").contains(headValue));
@@ -182,9 +179,8 @@ public class Task2 {
     }
 
     public TextMessage receiveMessageOUT() throws JMSException, InterruptedException {
-        //Полуение соощения из очереди OUT с ожиданием в 8 сек.
         Thread.sleep(8000);
-        TextMessage receivedMessageOUT = (TextMessage) receiverOUT.receive(8000);
+        TextMessage receivedMessageOUT = checkLastMessage(receiverOUT);
         return receivedMessageOUT;
     }
 
@@ -199,6 +195,19 @@ public class Task2 {
         else {
             System.out.println("queueOUT is empty");
         }
+    }
+
+
+    public TextMessage checkLastMessage(MQQueueReceiver reciver) throws JMSException {
+        browser = session.createBrowser((Queue) reciver.getDestination());
+        //Чтение сообщений из очереди
+        Enumeration<?> allMessages = browser.getEnumeration();
+        TextMessage message = null;
+        //Опеределнение кол-ва всех сообщеий, цикл на поиск последнего элмента очереди
+        while (allMessages.hasMoreElements()) {
+            message = (TextMessage) allMessages.nextElement();
+        }
+        return message;
     }
 
     private TextMessage createTextMessage(String xmlPath) throws IOException, JMSException {
