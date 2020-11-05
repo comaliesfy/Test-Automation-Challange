@@ -17,7 +17,8 @@
         <mysql-connector-java.version>8.0.21</mysql-connector-java.version>
         <json.version>20200518</json.version>
         <code.gson.verion>2.8.6</code.gson.verion>
-        <jms.version>1.1</jms.version>
+        <jms.version>2.0.1</jms.version>
+        <ibm.version>9.2.0.1</ibm.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -37,20 +38,14 @@
         <dependency>
             <groupId>javax.jms</groupId>
             <artifactId>javax.jms-api</artifactId>
-            <version>2.0.1</version>
+            <version>${jms.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.mq</groupId>
             <artifactId>com.ibm.mq.allclient</artifactId>
-            <version>9.2.0.1</version>
+            <version>${ibm.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-jndi</artifactId>
-            <version>11.0.0-alpha0</version>
-        </dependency>
-
-        <dependency>
+            <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
